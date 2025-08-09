@@ -1,0 +1,6 @@
+var json_pathTest_0 = 
+{"type":"FeatureCollection","name":"pathTest_0","features":[
+{"type":"Feature","properties":{"id":"0","PenguinNum":10.0,"Name":"Far West"},"geometry":{"type":"MultiLineString","coordinates":[[[145.150502849664633,-38.512080671584776],[145.149175812612981,-38.511576338873255],[145.148969242570132,-38.511028928259712],[145.148958914067975,-38.510202648088331]]]}},
+{"type":"Feature","properties":{"id":"1","PenguinNum":12.0,"Name":"West"},"geometry":{"type":"MultiLineString","coordinates":[[[145.150648704487054,-38.51149836768468],[145.150059308757875,-38.511414168294792],[145.149817235511961,-38.511024746116583],[145.149227455123679,-38.510667430684734]]]}},
+{"type":"Feature","properties":{"id":"2","PenguinNum":7.0,"Name":"Center"},"geometry":{"type":"MultiLineString","coordinates":[[[145.150964452199105,-38.51112999535394],[145.150701329105743,-38.510719523328262],[145.150301382003789,-38.510340626073784]]]}},
+{"type":"Feature","properties":{"id":"4","PenguinNum":16.0,"Name":"East"},"geometry":{"type":"MultiLineString","coordinates":[[[145.151590262439839,-38.510743533736907],[145.151105591958071,-38.510357775598365],[145.150977005911898,-38.509882996350932],[145.150591247773349,-38.50955658561832]]]}}]}

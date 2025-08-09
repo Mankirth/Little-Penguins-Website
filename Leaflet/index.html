@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <script src="https://cdn.jsdelivr.net/npm/leaflet-hash@0.2.1/leaflet-hash.min.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.5.1/dist/leaflet.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.min.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.css">
+        <title></title>
+    </head>
+    <body>
+        <h1>Phillip Island Map</h1>
+        <p id="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id efficitur ligula. Donec nec est quis lorem vehicula semper eu in magna. Mauris vehicula imperdiet mauris et aliquam. Maecenas tortor orci, tempor eu tortor eget, fermentum tempor libero. Quisque bibendum elementum ipsum vitae tempus. Sed nibh eros, aliquam id laoreet ac, dictum mollis nunc. Aliquam fringilla turpis vitae diam cursus egestas ac nec libero. Proin lobortis lacus lacus, ac consectetur tellus placerat nec. Nunc aliquet et justo sit amet commodo. Aenean in tellus in dui tincidunt condimentum at et turpis.</p>
+        <br>
+        <div id="map">
+            <div id="mapHeader">
+                <p id="headerPenguinCount" font-size: 24px;>Penguin Count: 880</p>
+            </div>
+        </div>
+
+        <h2>Adjustments</h2>
+        <h3>Add a Layer</h3>
+        <form id="AddLayerForm"method="post">
+            <label for="data">Type of Data:</label>
+            <input type="radio" id="total" name="File_Type" value="total" required>
+            <label for="total">Total Penguin Count</label>
+            <input type="radio" id="paths" name="File_Type" value="paths">
+            <label for="paths">Path Seperated Penguin Count</label>
+            <input type="radio" id="T2M" name="File_Type" value="averageTemp">
+            <label for="T2M">Average Temperature</label>
+            <input type="radio" id="T2M_Max" name="File_Type" value="maxTemp">
+            <label for="T2M_Max">Maximum Temperature</label>
+            <input type="radio" id="T2M_Min" name="File_Type" value="minTemp">
+            <label for="T2M_Min">Minimum Temperature</label>
+            <input type="radio" id="Precipitation" name="File_Type" value="precipitation">
+            <label for="Precipitation">Precipitation</label>
+            <input type="radio" id="Humidity" name="File_Type" value="humidity">
+            <label for="Humidity">Humidity</label>
+            <input type="radio" id="Wind Speed" name="File_Type" value="windSpeed">
+            <label for="Wind Speed">Wind Speed</label>
+            <input type="radio" id="SST" name="File_Type" value="seaSurfaceTemp">
+            <label for="SST">Weekly Sea Surface Temperature</label><br>
+            <br>
+            <table>
+                <tr>
+                    <th class="layerTable">Layer(s)</th>
+                    <th class="layerTable">Required CSV Column Order</th>
+                    <th class="layerTable">Formatting Notes</th>
+                </tr>
+                <tr>
+                    <td class="layerTable">Total Penguin Count</td>
+                    <td class="layerTable">Date | Reading</td>
+                    <td class="layerTable"></td>
+                </tr>
+                <tr>
+                    <td class="layerTable">Path Seperated Penguin Count</td>
+                    <td class="layerTable">Date | Reading | Pathway</td>
+                    <td class="layerTable">"Center", "West", "Far West", or "East"</td>
+                </tr>
+                <tr>
+                    <td class="layerTable">Temperature/Precipitation/Humidity/Wind Speed</td>
+                    <td class="layerTable">Latituide | Longitude | Reading | Date</td>
+                    <td class="layerTable"></td>
+                </tr>
+                <tr>
+                    <td class="layerTable">Sea Surface Temperature</td>
+                    <td class="layerTable">Date | Reading | Latitude | Longitude</td>
+                    <td class="layerTable">Must be Weekly Data</td>
+                </tr>
+            </table>
+            <br>
+            <label for="layerename">Name Your Layer: </label>
+            <input type="text" id="layername" name ="layername" required>
+            <input type="file" id="data" name="data" accept=".csv" required><br><br>
+            <input type="button" value="Upload" onclick="uploadFile()">
+        </form> <br> <br>
+
+        <h3>Remove A Layer</h3>
+        <form id="RemoveLayerForm" method="post">
+            Select Layer: <div id="removeForm"></div>
+            <input type="button" value="Remove" onclick="removeLayer()">
+        </form> <br> <br>
+
+        <h3>Change Layer Value limits</h3>
+        <form id="ChangeLimitsForm" method="post">
+            <label>Type of Data:</label>
+            <input type="radio" id="T2M_Max limit" name="Limit_Change" value=6 onclick="fillLimits(6)">
+            <label for="T2M_Max limit">Maximum Temperature</label>
+            <input type="radio" id="T2M limit" name="Limit_Change" value=5 onclick="fillLimits(5)">
+            <label for="T2M limit">Average Temperature</label>
+            <input type="radio" id="T2M_Min limit" name="Limit_Change" value=4 onclick="fillLimits(4)">
+            <label for="T2M_Min limit">Minimum Temperature</label>
+            <input type="radio" id="Precipitation limit" name="Limit_Change" value=3 onclick="fillLimits(3)">
+            <label for="Precipitation limit">Precipitation</label>
+            <input type="radio" id="Humidity limit" name="Limit_Change" value=2 onclick="fillLimits(2)">
+            <label for="Humidity limit">Humidity</label>
+            <input type="radio" id="Wind Speed limit" name="Limit_Change" value=1 onclick="fillLimits(1)">
+            <label for="Wind Speed limit">Wind Speed</label>
+            <input type="radio" id="SST limit" name="Limit_Change" value=0 onclick="fillLimits(0)">
+            <label for="SST limit">Weekly Sea Surface Temperature</label><br><br>
+            
+            <label for="minIn">-Edit Values-</label><br>
+            Value minimum: <input type="number" id="minIn" name ="minIn" required><br>
+            Value maximum: <input type="number" id="maxIn" name ="maxIn" required><br>
+            # of gradient categories: <input type="number" id="stepsIn" name ="stepsIn" required><br>
+            Gradient minimum: <input type="color" id="minColIn" name ="minColIn" required><br>
+            Gradient maximum: <input type="color" id="maxColIn" name ="maxColIn" required><br>
+            <input type="button" value="Update" onclick="changeLimits()"> <br> <br>
+        </form>
+
+        <script src="js/leaflet.js"></script>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="data/Geo_Penguin_Count.js"></script>
+        <script src="data/Paths_Combined_2.js"></script>
+        <script src="data/Phillip_Island_Whole_3.js"></script>
+        <script src="data/Geo_WEEKLY_SSTweekly_sstcopy_4.js"></script>
+        <script src="data/Geo_WS2Mws2mcopy_5.js"></script>
+        <script src="data/Geo_RH2Mrh2mcopy_6.js"></script>
+        <script src="data/Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7.js"></script>
+        <script src="data/Geo_T2M_MINt2m_mincopy_8.js"></script>
+        <script src="data/Geo_T2Mt2mcopy_9.js"></script>
+        <script src="data/Geo_T2M_MAXt2m_maxcopy_10.js"></script>
+        <script src="data/Geo_PenguinTotal.js"></script>
+        <script src="data/Geo_Phillip_Island_Whole_3.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/leaflet@1.5.1/dist/leaflet.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/L.Control.Layers.Tree.min.js"></script>
+        <script src="js/mapDefinition.js"></script>
+
+    </body>
+</html>
