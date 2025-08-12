@@ -9,7 +9,11 @@ var minCols = [[252, 143, 111],[48, 18, 59],[250, 235, 221],[247, 251, 255],[255
 var penguinCountToday, avgWindSpeed = 0;
 var layers = new Map();
 var totalLayers = [];
+var starterPenguinCount = Object.create({});
+var penguinCountDaily = [starterPenguinCount];
 var isVisible;
+var firstLoad = true;
+
 function highlightFeature(e) {
     highlightLayer = e.target;
 
@@ -170,8 +174,10 @@ var layer_Geo_Penguin_Count_Timed = L.timeDimension.layer.geoJson(layer_Geo_Peng
 });
 bounds_group.addLayer(layer_Geo_Penguin_Count_Timed);
 map.addLayer(layer_Geo_Penguin_Count_Timed);
-//map.addLayer(layer_Geo_Penguin_Count);
 function pop_Paths_Combined_2(feature, layer) {
+    if(firstLoad)
+        Object.defineProperty(starterPenguinCount, feature.properties["time"], {value: feature.properties["NIGHTLY_PENGUIN_COUNT"], configurable: true, enumerable: true});
+    penguinCountToday = feature.properties['NIGHTLY_PENGUIN_COUNT'];
     layer.on({
         mouseout: function(e) {
             for (var i in e.target._eventParents) {
@@ -203,7 +209,6 @@ function pop_Paths_Combined_2(feature, layer) {
 }
 
 function style_Paths_Combined_2_0(feature) {
-    penguinCountToday = feature.properties['NIGHTLY_PENGUIN_COUNT'];
     if (isVisible){
         console.log("returning invisible and uninteractive");
         return {
@@ -920,16 +925,16 @@ var layer_Geo_T2M_MAXt2m_maxcopy_10_Timed = L.timeDimension.layer.geoJson(layer_
 bounds_group.addLayer(layer_Geo_T2M_MAXt2m_maxcopy_10_Timed);
 
 layers = new Map([
-    ["Maximum Temperature", layer_Geo_T2M_MAXt2m_maxcopy_10_Timed],
-    ["Average Temperature", layer_Geo_T2Mt2mcopy_9_Timed],
-    ["Minimum Temperature", layer_Geo_T2M_MINt2m_mincopy_8_Timed],
-    ["Precipitation", layer_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7_Timed],
-    ["Humidity", layer_Geo_RH2Mrh2mcopy_6_Timed],
-    ["Wind Speed", layer_Geo_WS2Mws2mcopy_5_Timed],
-    ["Sea Surface Temperature", layer_Geo_WEEKLY_SSTweekly_sstcopy_4_Timed],
-    ["Phillip Island", layer_Phillip_Island_Whole_3],
-    ["Paths Combined Penguin Count", layer_Paths_Combined_2_Timed],
-    ["Path Seperated Penguin Count", layer_Geo_Penguin_Count_Timed]
+    ["Maximum Temperature", [layer_Geo_T2M_MAXt2m_maxcopy_10_Timed, Object.create({}), "maxTemp"]],
+    ["Average Temperature", [layer_Geo_T2Mt2mcopy_9_Timed, Object.create({}), "averageTemp"]],
+    ["Minimum Temperature", [layer_Geo_T2M_MINt2m_mincopy_8_Timed, Object.create({}), "minTemp"]],
+    ["Precipitation", [layer_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7_Timed, Object.create({}), "precipitation"]],
+    ["Humidity", [layer_Geo_RH2Mrh2mcopy_6_Timed, Object.create({}), "humidity"]],
+    ["Wind Speed", [layer_Geo_WS2Mws2mcopy_5_Timed, Object.create({}), "windSpeed"]],
+    ["Sea Surface Temperature", [layer_Geo_WEEKLY_SSTweekly_sstcopy_4_Timed, Object.create({}), "seaSurfaceTemp"]],
+    ["Phillip Island", [layer_Phillip_Island_Whole_3, Object.create({}), "island"]],
+    ["Paths Combined Penguin Count", [layer_Paths_Combined_2_Timed, starterPenguinCount, "total"]],
+    ["Path Seperated Penguin Count", [layer_Geo_Penguin_Count_Timed, Object.create({}), "paths"]]
 ]);
 var control = new L.control.layers({},{
     "Maximum Temp.": layer_Geo_T2M_MAXt2m_maxcopy_10_Timed,
@@ -1028,6 +1033,7 @@ map.on("layerremove", function(){
 
 
 async function uploadFile(){
+    firstLoad = false;
     const radioButtons = document.querySelectorAll('input[name="File_Type"]');
     for (const radioButton of radioButtons) {
         if (radioButton.checked) {
@@ -1049,8 +1055,11 @@ async function uploadFile(){
                     "name": "Geo_PenguinTotal",
                     "features":[]
                 };
+                var graphData = Object.create({});
                 lines.forEach((line, index) => {
                     if(index == 0 || line === "") return;
+                    Object.defineProperty(graphData, line.split(',')[0].trim(), {value: line.split(',')[1], configurable: true, enumerable: true});
+                    console.log("Adding Data: " + line);
                     out.features.push({ "type": "Feature", "properties": { "time": line.split(',')[0], "NIGHTLY_PENGUIN_COUNT": line.split(',')[1] }, "geometry":{"type":"MultiLineString","coordinates":[[[145.150762586954954,-38.511360743832689],[145.149400694832991,-38.510479519518491],[145.14916036092913,-38.509830617978025],[145.147724283228712,-38.508961175662847]]]} });
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Paths_Combined_2.options), {
@@ -1067,6 +1076,7 @@ async function uploadFile(){
                 };
                 lines.forEach((line, index) => {
                     if(index == 0 || line === "") return;
+                    Object.defineProperty(graphData, line.split(',')[0].trim(), {value: line.split(',')[1], configurable: true, enumerable: true});
                     var path = null;
                     switch(line.split(',')[2].trim()){
                         case "Center":
@@ -1102,6 +1112,7 @@ async function uploadFile(){
                 };
                 lines.forEach((line, index) => {
                     if(index == 0 || line === "") return;
+                    Object.defineProperty(graphData, line.split(',')[3].trim(), {value: line.split(',')[2], configurable: true, enumerable: true});
                     out.features.push({"type":"Feature","properties":{"fid":"173476","LAT":parseFloat(line.split(',')[0]),"LON":parseFloat(line.split(',')[1]),"T2M":parseFloat(line.split(',')[2]),"time":line.split(',')[3]},"geometry":{"type":"Point","coordinates":[parseFloat(line.split(',')[1]),parseFloat(line.split(',')[0])]}});
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_T2Mt2mcopy_9.options), {
@@ -1119,6 +1130,7 @@ async function uploadFile(){
                 };
                 lines.forEach((line, index) => {
                     if(index == 0 || line === "") return;
+                    Object.defineProperty(graphData, line.split(',')[3].trim(), {value: line.split(',')[2], configurable: true, enumerable: true});
                     out.features.push({"type":"Feature","properties":{"fid":"173478","LAT":parseFloat(line.split(',')[0]),"LON":parseFloat(line.split(',')[1]),"T2M_MAX":parseFloat(line.split(',')[2]),"time":line.split(',')[3]},"geometry":{"type":"Point","coordinates":[parseFloat(line.split(',')[1]),parseFloat(line.split(',')[0])]}});
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_T2M_MAXt2m_maxcopy_10.options), {
@@ -1136,6 +1148,7 @@ async function uploadFile(){
                 };
                 lines.forEach((line, index) => {
                     if(index == 0 || line === "") return;
+                    Object.defineProperty(graphData, line.split(',')[3].trim(), {value: line.split(',')[2], configurable: true, enumerable: true});
                     out.features.push({"type":"Feature","properties":{"fid":"173478","LAT":parseFloat(line.split(',')[0]),"LON":parseFloat(line.split(',')[1]),"T2M_MIN":parseFloat(line.split(',')[2]),"time":line.split(',')[3]},"geometry":{"type":"Point","coordinates":[parseFloat(line.split(',')[1]),parseFloat(line.split(',')[0])]}});
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_T2M_MINt2m_mincopy_8.options), {
@@ -1153,6 +1166,7 @@ async function uploadFile(){
                 }
                 lines.forEach((line, index) => {
                     if(index == 0 || line === "") return;
+                    Object.defineProperty(graphData, line.split(',')[3].trim(), {value: line.split(',')[2], configurable: true, enumerable: true});
                     out.features.push({"type":"Feature","properties":{"fid":"173476","LAT":parseFloat(line.split(',')[0]),"LON":parseFloat(line.split(',')[1]),"PRECTOTCORR":parseFloat(line.split(',')[2]),"time":line.split(',')[3]},"geometry":{"type":"Point","coordinates":[parseFloat(line.split(',')[1]),parseFloat(line.split(',')[0])]}});
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7.options), {
@@ -1170,6 +1184,7 @@ async function uploadFile(){
                 };
                 lines.forEach((line, index) => {
                     if(index == 0 || line === "") return;
+                    Object.defineProperty(graphData, line.split(',')[3].trim(), {value: line.split(',')[2], configurable: true, enumerable: true});
                     console.log("Line: " + line.split(',')[0]);
                     out.features.push({"type":"Feature","properties":{"fid":"173481","LAT":parseFloat(line.split(',')[0]),"LON":parseFloat(line.split(',')[1]),"RH2M":parseFloat(line.split(',')[2]),"time":line.split(',')[3]},"geometry":{"type":"Point","coordinates":[parseFloat(line.split(',')[1]),parseFloat(line.split(',')[0])]}});
                 });
@@ -1188,6 +1203,7 @@ async function uploadFile(){
                 };
                 lines.forEach((line, index) => {
                     if(index == 0 || line === "") return;
+                    Object.defineProperty(graphData, line.split(',')[3].trim(), {value: line.split(',')[2], configurable: true, enumerable: true});
                     out.features.push({"type":"Feature","properties":{"fid":"173482","field_1":173481.0,"LAT":parseFloat(line.split(',')[0]),"LON":parseFloat(line.split(',')[1]),"WS2M":parseFloat(line.split(',')[2]),"time":line.split(',')[3]},"geometry":{"type":"Point","coordinates":[parseFloat(line.split(',')[1]),parseFloat(line.split(',')[0])]}});
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_WS2Mws2mcopy_5.options), {
@@ -1205,6 +1221,7 @@ async function uploadFile(){
                 };
                 lines.forEach((line, index) => {
                     if(index == 0 || line === "") return;
+                    Object.defineProperty(graphData, line.split(',')[0].trim(), {value: line.split(',')[1], configurable: true, enumerable: true});
                     out.features.push({"type":"Feature","properties":{"fid":"957","field_1":956.0,"time":line.split(',')[0],"SST":parseFloat(line.split(',')[1]),"LON":parseFloat(line.split(',')[2]),"LAT":parseFloat(line.split(',')[3])},"geometry":{"type":"Point","coordinates":[parseFloat(line.split(',')[2]),parseFloat(line.split(',')[3])]}});
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_WEEKLY_SSTweekly_sstcopy_4.options), {
@@ -1218,7 +1235,7 @@ async function uploadFile(){
         }   
         bounds_group.addLayer(newLayer);
         addToRemoveList(name);
-        layers.set(name, newLayer);
+        layers.set(name, [newLayer, graphData, type]);
         if(type != "total" && type != "paths")
             control.addOverlay(newLayer, name);
         else
@@ -1304,9 +1321,9 @@ function removeLayer(){
         }
     }
     if(layerIn != null){
-        map.removeLayer(layers.get(layerIn));
+        map.removeLayer(layers.get(layerIn)[0]);
         try{
-            control.removeLayer(layers.get(layerIn));
+            control.removeLayer(layers.get(layerIn)[0]);
         }
         catch (error) {
             console.log(error);
@@ -1315,5 +1332,63 @@ function removeLayer(){
     else{
         console.log("layerIn is null");
     }
+    layers.delete(layerIn);
     document.getElementById("RemoveLayerForm").reset(); 
+}
+
+async function createChart(){
+    firstLoad = false;
+    const radioButtons = document.querySelectorAll('input[name="Chart_Type"]');
+    for (const radioButton of radioButtons) {
+        if (radioButton.checked) {
+            var type = radioButton.value;
+            break;
+        }
+    }
+    var data = Object.create({});
+    layers.forEach(function(layer){
+        console.log(layer[2]);
+        if(layer[2] === type){
+            console.log("Match Found");
+            data = merge_options(data, layer[1]);
+        }
+    });
+    document.getElementById("ChangeLimitsForm").reset(); 
+
+    const ctx = document.getElementById('myChart');
+    oldChart = Chart.getChart(ctx);
+    if(oldChart != null)
+        oldChart.destroy();
+    console.log("Chart: " + ctx);
+    console.log("Data: " + data);
+    new Chart(ctx, {
+        type: 'scatter',
+        data: {
+        datasets: [{
+            label: '# of Penguins',
+            data: data,
+            borderWidth: 1
+        }]
+        },
+        options: {
+        scales: {
+            x:{
+                type: 'time',
+                time: {
+                    unit: 'year'
+                }
+            },
+            y: {
+            beginAtZero: true
+            }
+        }
+        }
+    });
+}
+
+function merge_options(obj1,obj2){
+    var obj3 = {};
+    for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
+    for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+    return obj3;
 }

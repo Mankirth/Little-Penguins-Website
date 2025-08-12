@@ -32,21 +32,21 @@
             <label for="data">Type of Data:</label>
             <input type="radio" id="total" name="File_Type" value="total" required>
             <label for="total">Total Penguin Count</label>
-            <input type="radio" id="paths" name="File_Type" value="paths">
+            <input type="radio" id="paths" name="File_Type" value="paths" required>
             <label for="paths">Path Seperated Penguin Count</label>
-            <input type="radio" id="T2M" name="File_Type" value="averageTemp">
+            <input type="radio" id="T2M" name="File_Type" value="averageTemp" required>
             <label for="T2M">Average Temperature</label>
-            <input type="radio" id="T2M_Max" name="File_Type" value="maxTemp">
+            <input type="radio" id="T2M_Max" name="File_Type" value="maxTemp" required>
             <label for="T2M_Max">Maximum Temperature</label>
-            <input type="radio" id="T2M_Min" name="File_Type" value="minTemp">
+            <input type="radio" id="T2M_Min" name="File_Type" value="minTemp" required>
             <label for="T2M_Min">Minimum Temperature</label>
-            <input type="radio" id="Precipitation" name="File_Type" value="precipitation">
+            <input type="radio" id="Precipitation" name="File_Type" value="precipitation" required>
             <label for="Precipitation">Precipitation</label>
-            <input type="radio" id="Humidity" name="File_Type" value="humidity">
+            <input type="radio" id="Humidity" name="File_Type" value="humidity" required>
             <label for="Humidity">Humidity</label>
-            <input type="radio" id="Wind Speed" name="File_Type" value="windSpeed">
+            <input type="radio" id="Wind Speed" name="File_Type" value="windSpeed" required>
             <label for="Wind Speed">Wind Speed</label>
-            <input type="radio" id="SST" name="File_Type" value="seaSurfaceTemp">
+            <input type="radio" id="SST" name="File_Type" value="seaSurfaceTemp" required>
             <label for="SST">Weekly Sea Surface Temperature</label><br>
             <br>
             <table>
@@ -92,19 +92,19 @@
         <h3>Change Layer Value limits</h3>
         <form id="ChangeLimitsForm" method="post">
             <label>Type of Data:</label>
-            <input type="radio" id="T2M_Max limit" name="Limit_Change" value=6 onclick="fillLimits(6)">
+            <input type="radio" id="T2M_Max limit" name="Limit_Change" value=6 onclick="fillLimits(6)" required>
             <label for="T2M_Max limit">Maximum Temperature</label>
-            <input type="radio" id="T2M limit" name="Limit_Change" value=5 onclick="fillLimits(5)">
+            <input type="radio" id="T2M limit" name="Limit_Change" value=5 onclick="fillLimits(5)" required>
             <label for="T2M limit">Average Temperature</label>
-            <input type="radio" id="T2M_Min limit" name="Limit_Change" value=4 onclick="fillLimits(4)">
+            <input type="radio" id="T2M_Min limit" name="Limit_Change" value=4 onclick="fillLimits(4)" required>
             <label for="T2M_Min limit">Minimum Temperature</label>
-            <input type="radio" id="Precipitation limit" name="Limit_Change" value=3 onclick="fillLimits(3)">
+            <input type="radio" id="Precipitation limit" name="Limit_Change" value=3 onclick="fillLimits(3)" required>
             <label for="Precipitation limit">Precipitation</label>
-            <input type="radio" id="Humidity limit" name="Limit_Change" value=2 onclick="fillLimits(2)">
+            <input type="radio" id="Humidity limit" name="Limit_Change" value=2 onclick="fillLimits(2)" required>
             <label for="Humidity limit">Humidity</label>
-            <input type="radio" id="Wind Speed limit" name="Limit_Change" value=1 onclick="fillLimits(1)">
+            <input type="radio" id="Wind Speed limit" name="Limit_Change" value=1 onclick="fillLimits(1)" required>
             <label for="Wind Speed limit">Wind Speed</label>
-            <input type="radio" id="SST limit" name="Limit_Change" value=0 onclick="fillLimits(0)">
+            <input type="radio" id="SST limit" name="Limit_Change" value=0 onclick="fillLimits(0)" required>
             <label for="SST limit">Weekly Sea Surface Temperature</label><br><br>
             
             <label for="minIn">-Edit Values-</label><br>
@@ -116,6 +116,37 @@
             <input type="button" value="Update" onclick="changeLimits()"> <br> <br>
         </form>
 
+        <h3>Create Graph</h3>
+        <form id="CreateChartForm" method="post">
+            <label for="data">Type of Data:</label>
+            <input type="radio" id="total_Chart" name="Chart_Type" value="total" required>
+            <label for="total_Chart">Total Penguin Count</label>
+            <input type="radio" id="paths_Chart" name="Chart_Type" value="paths" required>
+            <label for="paths_Chart">Path Seperated Penguin Count</label>
+            <input type="radio" id="T2M_Chart" name="Chart_Type" value="averageTemp" required>
+            <label for="T2M_Chart">Average Temperature</label>
+            <input type="radio" id="T2M_Max_Chart" name="Chart_Type" value="maxTemp" required>
+            <label for="T2M_Max_Chart">Maximum Temperature</label>
+            <input type="radio" id="T2M_Min_Chart" name="Chart_Type" value="minTemp" required>
+            <label for="T2M_Min_Chart">Minimum Temperature</label>
+            <input type="radio" id="Precipitation_Chart" name="Chart_Type" value="precipitation" required>
+            <label for="Precipitation_Chart">Precipitation</label>
+            <input type="radio" id="Humidity_Chart" name="Chart_Type" value="humidity" required>
+            <label for="Humidity_Chart">Humidity</label>
+            <input type="radio" id="Wind Speed_Chart" name="Chart_Type" value="windSpeed" required>
+            <label for="Wind Speed_Chart">Wind Speed</label>
+            <input type="radio" id="SST_Chart" name="Chart_Type" value="seaSurfaceTemp" required>
+            <label for="SST_Chart">Weekly Sea Surface Temperature</label><br>
+            <input type="button" value="Create" onclick="createChart()">
+        </form> <br> <br>
+
+        <div>
+            <canvas id="myChart"></canvas>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@0.1.1"></script>
         <script src="js/leaflet.js"></script>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
