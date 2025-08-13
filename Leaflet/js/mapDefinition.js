@@ -6,14 +6,18 @@ var maxs = [19.474772, 14, 91, 3.37, 40.361, 40.361, 40.361];
 var steps = [6, 10, 10, 5, 5, 5, 5];
 var maxCols = [[103, 0, 13],[122, 4, 3],[3, 5, 26],[8, 48, 107],[255, 0, 0],[255, 0, 0],[0, 0, 0]]; 
 var minCols = [[252, 143, 111],[48, 18, 59],[250, 235, 221],[247, 251, 255],[255, 255, 255],[255, 255, 255],[255, 255, 255]];
+//total, sst, wind speed, humidity, precipitation, min, average, max
+var starterData = [Object.create({}), Object.create({}), Object.create({}), Object.create({}), Object.create({}), Object.create({}), Object.create({}), Object.create({})];
 var penguinCountToday, avgWindSpeed = 0;
 var layers = new Map();
 var totalLayers = [];
 var starterPenguinCount = Object.create({});
-var penguinCountDaily = [starterPenguinCount];
 var isVisible;
 var firstLoad = true;
-
+document.getElementById("RemoveLayerForm").reset(); 
+document.getElementById("AddLayerForm").reset(); 
+document.getElementById("ChangeLimitsForm").reset(); 
+document.getElementById("CreateChartForm").reset(); 
 function highlightFeature(e) {
     highlightLayer = e.target;
 
@@ -176,7 +180,7 @@ bounds_group.addLayer(layer_Geo_Penguin_Count_Timed);
 map.addLayer(layer_Geo_Penguin_Count_Timed);
 function pop_Paths_Combined_2(feature, layer) {
     if(firstLoad)
-        Object.defineProperty(starterPenguinCount, feature.properties["time"], {value: feature.properties["NIGHTLY_PENGUIN_COUNT"], configurable: true, enumerable: true});
+        Object.defineProperty(starterData[0], feature.properties["time"], {value: feature.properties["NIGHTLY_PENGUIN_COUNT"], configurable: true, enumerable: true});
     penguinCountToday = feature.properties['NIGHTLY_PENGUIN_COUNT'];
     layer.on({
         mouseout: function(e) {
@@ -345,6 +349,8 @@ map.timeDimension.on('timeload', function(data){
 });
 
 function pop_Geo_WEEKLY_SSTweekly_sstcopy_4(feature, layer) {
+    if(firstLoad)
+        Object.defineProperty(starterData[1], feature.properties["time"], {value: feature.properties["SST"], configurable: true, enumerable: true});
     layer.on({
         mouseout: function(e) {
             for (var i in e.target._eventParents) {
@@ -425,6 +431,8 @@ var layer_Geo_WEEKLY_SSTweekly_sstcopy_4_Timed = L.timeDimension.layer.geoJson(l
 bounds_group.addLayer(layer_Geo_WEEKLY_SSTweekly_sstcopy_4_Timed);
 
 function pop_Geo_WS2Mws2mcopy_5(feature, layer) {
+    if(firstLoad)
+        Object.defineProperty(starterData[2], feature.properties["time"], {value: feature.properties["WS2M"], configurable: true, enumerable: true});
     layer.on({
         mouseout: function(e) {
             for (var i in e.target._eventParents) {
@@ -507,6 +515,8 @@ var layer_Geo_WS2Mws2mcopy_5_Timed = L.timeDimension.layer.geoJson(layer_Geo_WS2
 bounds_group.addLayer(layer_Geo_WS2Mws2mcopy_5_Timed);
 
 function pop_Geo_RH2Mrh2mcopy_6(feature, layer) {
+    if(firstLoad)
+        Object.defineProperty(starterData[3], feature.properties["time"], {value: feature.properties["RH2M"], configurable: true, enumerable: true});
     layer.on({
         mouseout: function(e) {
             for (var i in e.target._eventParents) {
@@ -588,6 +598,8 @@ var layer_Geo_RH2Mrh2mcopy_6_Timed = L.timeDimension.layer.geoJson(layer_Geo_RH2
 bounds_group.addLayer(layer_Geo_RH2Mrh2mcopy_6_Timed);
 
 function pop_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7(feature, layer) {
+    if(firstLoad)
+        Object.defineProperty(starterData[4], feature.properties["time"], {value: feature.properties["PRECTOTCORR"], configurable: true, enumerable: true});
     layer.on({
         mouseout: function(e) {
             for (var i in e.target._eventParents) {
@@ -668,6 +680,8 @@ var layer_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7_Timed = L.timeDimensi
 bounds_group.addLayer(layer_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7_Timed);
 
 function pop_Geo_T2M_MINt2m_mincopy_8(feature, layer) {
+    if(firstLoad)
+        Object.defineProperty(starterData[5], feature.properties["time"], {value: feature.properties["T2M_MIN"], configurable: true, enumerable: true});
     layer.on({
         mouseout: function(e) {
             for (var i in e.target._eventParents) {
@@ -769,6 +783,8 @@ var layer_Geo_T2M_MINt2m_mincopy_8_Timed = L.timeDimension.layer.geoJson(layer_G
 bounds_group.addLayer(layer_Geo_T2M_MINt2m_mincopy_8_Timed);
 
 function pop_Geo_T2Mt2mcopy_9(feature, layer) {
+    if(firstLoad)
+        Object.defineProperty(starterData[6], feature.properties["time"], {value: feature.properties["T2M"], configurable: true, enumerable: true});
     layer.on({
         mouseout: function(e) {
             for (var i in e.target._eventParents) {
@@ -847,6 +863,8 @@ var layer_Geo_T2Mt2mcopy_9_Timed = L.timeDimension.layer.geoJson(layer_Geo_T2Mt2
 bounds_group.addLayer(layer_Geo_T2Mt2mcopy_9_Timed);
 
 function pop_Geo_T2M_MAXt2m_maxcopy_10(feature, layer) {
+    if(firstLoad)
+        Object.defineProperty(starterData[7], feature.properties["time"], {value: feature.properties["T2M_MAX"], configurable: true, enumerable: true});
     layer.on({
         mouseout: function(e) {
             for (var i in e.target._eventParents) {
@@ -925,16 +943,16 @@ var layer_Geo_T2M_MAXt2m_maxcopy_10_Timed = L.timeDimension.layer.geoJson(layer_
 bounds_group.addLayer(layer_Geo_T2M_MAXt2m_maxcopy_10_Timed);
 
 layers = new Map([
-    ["Maximum Temperature", [layer_Geo_T2M_MAXt2m_maxcopy_10_Timed, Object.create({}), "maxTemp"]],
-    ["Average Temperature", [layer_Geo_T2Mt2mcopy_9_Timed, Object.create({}), "averageTemp"]],
-    ["Minimum Temperature", [layer_Geo_T2M_MINt2m_mincopy_8_Timed, Object.create({}), "minTemp"]],
-    ["Precipitation", [layer_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7_Timed, Object.create({}), "precipitation"]],
-    ["Humidity", [layer_Geo_RH2Mrh2mcopy_6_Timed, Object.create({}), "humidity"]],
-    ["Wind Speed", [layer_Geo_WS2Mws2mcopy_5_Timed, Object.create({}), "windSpeed"]],
-    ["Sea Surface Temperature", [layer_Geo_WEEKLY_SSTweekly_sstcopy_4_Timed, Object.create({}), "seaSurfaceTemp"]],
-    ["Phillip Island", [layer_Phillip_Island_Whole_3, Object.create({}), "island"]],
-    ["Paths Combined Penguin Count", [layer_Paths_Combined_2_Timed, starterPenguinCount, "total"]],
-    ["Path Seperated Penguin Count", [layer_Geo_Penguin_Count_Timed, Object.create({}), "paths"]]
+    ["Maximum Temperature", [layer_Geo_T2M_MAXt2m_maxcopy_10_Timed, starterData[7], "maxTemp"]],
+    ["Average Temperature", [layer_Geo_T2Mt2mcopy_9_Timed, starterData[6], "averageTemp"]],
+    ["Minimum Temperature", [layer_Geo_T2M_MINt2m_mincopy_8_Timed, starterData[5], "minTemp"]],
+    ["Precipitation", [layer_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7_Timed, starterData[4], "precipitation"]],
+    ["Humidity", [layer_Geo_RH2Mrh2mcopy_6_Timed, starterData[3], "humidity"]],
+    ["Wind Speed", [layer_Geo_WS2Mws2mcopy_5_Timed, starterData[2], "windSpeed"]],
+    ["Sea Surface Temperature", [layer_Geo_WEEKLY_SSTweekly_sstcopy_4_Timed, starterData[1], "seaSurfaceTemp"]],
+    ["Phillip Island", [layer_Phillip_Island_Whole_3, starterData[0], "island"]],
+    ["Paths Combined Penguin Count", [layer_Paths_Combined_2_Timed, starterData[0], "total"]],
+    ["Path Seperated Penguin Count", [layer_Geo_Penguin_Count_Timed, starterData[0], "paths"]]
 ]);
 var control = new L.control.layers({},{
     "Maximum Temp.": layer_Geo_T2M_MAXt2m_maxcopy_10_Timed,
@@ -1048,6 +1066,7 @@ async function uploadFile(){
         const content = await file.text();
         const lines = content.split('\n');
         var out;
+        var graphData = Object.create({});
         switch(type){
             case "total":
                 out = {
@@ -1055,7 +1074,6 @@ async function uploadFile(){
                     "name": "Geo_PenguinTotal",
                     "features":[]
                 };
-                var graphData = Object.create({});
                 lines.forEach((line, index) => {
                     if(index == 0 || line === "") return;
                     Object.defineProperty(graphData, line.split(',')[0].trim(), {value: line.split(',')[1], configurable: true, enumerable: true});
@@ -1338,50 +1356,76 @@ function removeLayer(){
 
 async function createChart(){
     firstLoad = false;
-    const radioButtons = document.querySelectorAll('input[name="Chart_Type"]');
-    for (const radioButton of radioButtons) {
-        if (radioButton.checked) {
-            var type = radioButton.value;
-            break;
+    const checkboxes = document.querySelectorAll('input[name="Chart_Type"]');
+    var dataset = [];
+    for (const checkbox of checkboxes) {
+        if (checkbox.checked) {
+            var type = checkbox.value;
+            layers.forEach(function(layer){
+                if(layer[2] === type){
+                    var data = merge_options(data, layer[1]);
+                    var label = "Data";
+                    switch(type){
+                        case "total":
+                            label = '# of Penguins';
+                            break;
+                        case "averageTemp":
+                            label = 'Average Temperature';
+                            break;
+                        case "maxTemp":
+                            label = 'Maximum Temperature';
+                            break;
+                        case "minTemp":
+                            label = 'Minimum Temperature';
+                            break;
+                        case "precipitation":
+                            label = 'Precipitation';
+                            break;
+                        case "humidity":
+                            label = 'Humidity';
+                            break;
+                        case "windSpeed":
+                            label = 'Wind Speed';
+                            break;
+                        case "seaSurfaceTemp":
+                            label = 'Sea Surface Temperature';
+                            break;
+                        default:
+                            //error
+                    }
+                    dataset.push({
+                        label: label,
+                        data: data,
+                        borderWidth: 1
+                    });
+                }
+            });
         }
     }
-    var data = Object.create({});
-    layers.forEach(function(layer){
-        console.log(layer[2]);
-        if(layer[2] === type){
-            console.log("Match Found");
-            data = merge_options(data, layer[1]);
-        }
-    });
-    document.getElementById("ChangeLimitsForm").reset(); 
 
     const ctx = document.getElementById('myChart');
     oldChart = Chart.getChart(ctx);
     if(oldChart != null)
         oldChart.destroy();
     console.log("Chart: " + ctx);
-    console.log("Data: " + data);
     new Chart(ctx, {
         type: 'scatter',
         data: {
-        datasets: [{
-            label: '# of Penguins',
-            data: data,
-            borderWidth: 1
-        }]
+        datasets: dataset
         },
         options: {
-        scales: {
-            x:{
-                type: 'time',
-                time: {
-                    unit: 'year'
+            scales: {
+                x:{
+                    type: 'time',
+                    time: {
+                        unit: 'year'
+                    }
+                },
+                y: {
+                    normalized: true,
+                    beginAtZero: true
                 }
-            },
-            y: {
-            beginAtZero: true
             }
-        }
         }
     });
 }

@@ -1,11 +1,23 @@
 
-        #map {
-            background-color: #ffffff4d;
+        #map{
+            background-color: #f1ffff;
             width: 90%;
             height: 75%;
             overflow: hidden;
             margin:auto;
-            outline: auto;
+            outline-color: #72c1c1;
+            outline-width: 3px;
+            outline-style: solid;
+        }
+        #myChart{
+            background-color: #f1ffff;
+            width: 90%;
+            aspect-ratio: 18 / 7;
+            overflow: hidden;
+            margin:auto;
+            outline-color: #72c1c1;
+            outline-width: 3px;
+            outline-style: solid;
         }
         #mapHeader{
             font: initial;
@@ -28,12 +40,14 @@
             padding: 0;
             margin: 0;      
             text-align: center;
+            background-color: #fafcfc;
+            color: #070a0a;
         }
         table{
             margin: auto;
         }
         .layerTable{
-            outline: 1px solid black;
+            outline: 1px solid #9dcfcf;
             padding-left: 10px;
             padding-right: 10px;
         }

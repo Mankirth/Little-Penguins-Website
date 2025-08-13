@@ -119,30 +119,30 @@
         <h3>Create Graph</h3>
         <form id="CreateChartForm" method="post">
             <label for="data">Type of Data:</label>
-            <input type="radio" id="total_Chart" name="Chart_Type" value="total" required>
-            <label for="total_Chart">Total Penguin Count</label>
-            <input type="radio" id="paths_Chart" name="Chart_Type" value="paths" required>
-            <label for="paths_Chart">Path Seperated Penguin Count</label>
-            <input type="radio" id="T2M_Chart" name="Chart_Type" value="averageTemp" required>
+            <input type="checkbox" id="total_Chart" name="Chart_Type" value="total" required>
+            <label for="total_Chart">Penguin Count</label>
+            <input type="checkbox" id="T2M_Chart" name="Chart_Type" value="averageTemp" required>
             <label for="T2M_Chart">Average Temperature</label>
-            <input type="radio" id="T2M_Max_Chart" name="Chart_Type" value="maxTemp" required>
+            <input type="checkbox" id="T2M_Max_Chart" name="Chart_Type" value="maxTemp" required>
             <label for="T2M_Max_Chart">Maximum Temperature</label>
-            <input type="radio" id="T2M_Min_Chart" name="Chart_Type" value="minTemp" required>
+            <input type="checkbox" id="T2M_Min_Chart" name="Chart_Type" value="minTemp" required>
             <label for="T2M_Min_Chart">Minimum Temperature</label>
-            <input type="radio" id="Precipitation_Chart" name="Chart_Type" value="precipitation" required>
+            <input type="checkbox" id="Precipitation_Chart" name="Chart_Type" value="precipitation" required>
             <label for="Precipitation_Chart">Precipitation</label>
-            <input type="radio" id="Humidity_Chart" name="Chart_Type" value="humidity" required>
+            <input type="checkbox" id="Humidity_Chart" name="Chart_Type" value="humidity" required>
             <label for="Humidity_Chart">Humidity</label>
-            <input type="radio" id="Wind Speed_Chart" name="Chart_Type" value="windSpeed" required>
+            <input type="checkbox" id="Wind Speed_Chart" name="Chart_Type" value="windSpeed" required>
             <label for="Wind Speed_Chart">Wind Speed</label>
-            <input type="radio" id="SST_Chart" name="Chart_Type" value="seaSurfaceTemp" required>
-            <label for="SST_Chart">Weekly Sea Surface Temperature</label><br>
+            <input type="checkbox" id="SST_Chart" name="Chart_Type" value="seaSurfaceTemp" required>
+            <label for="SST_Chart">Sea Surface Temperature</label><br>
             <input type="button" value="Create" onclick="createChart()">
         </form> <br> <br>
 
-        <div>
+        <div id="chartContainer">
             <canvas id="myChart"></canvas>
         </div>
+        <br><br>
+        <div>&nbsp</div>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0"></script>
