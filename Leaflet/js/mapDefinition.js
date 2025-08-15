@@ -3,12 +3,14 @@ var highlightLayer;
 //SST WS2m Rh2M Prectotorr, t2mmin, t2m, t2mmax
 var mins = [8.194286, 0.04, 14.7, 0, -2.47, -2.47, -2.47];
 var maxs = [19.474772, 14, 91, 3.37, 40.361, 40.361, 40.361];
-var steps = [6, 10, 10, 5, 5, 5, 5];
-var maxCols = [[103, 0, 13],[122, 4, 3],[3, 5, 26],[8, 48, 107],[255, 0, 0],[255, 0, 0],[0, 0, 0]]; 
-var minCols = [[252, 143, 111],[48, 18, 59],[250, 235, 221],[247, 251, 255],[255, 255, 255],[255, 255, 255],[255, 255, 255]];
-//total, sst, wind speed, humidity, precipitation, min, average, max
+var steps = [5, 5, 5, 5, 5, 5, 5];
+var maxCols = [[255, 0, 0],[39, 216, 35],[164, 63, 177],[8, 48, 107],[255, 0, 0],[255, 0, 0],[255, 0, 0]]; 
+var minCols = [[255, 255, 255],[255, 255, 255],[255, 235, 255],[255, 255, 255],[255, 255, 255],[255, 255, 255],[255, 255, 255]];
+var averages = [0, 0, 0, 0, 0];
+var counters = [0, 0, 0, 0, 0];
+//total, sst, wind speed, humidity, precipitation, temp
 var starterData = [Object.create({}), Object.create({}), Object.create({}), Object.create({}), Object.create({}), Object.create({}), Object.create({}), Object.create({})];
-var penguinCountToday, avgWindSpeed = 0;
+var penguinCountToday;
 var layers = new Map();
 var totalLayers = [];
 var starterPenguinCount = Object.create({});
@@ -142,6 +144,8 @@ function pop_Geo_Penguin_Count(feature, layer) {
 }
 
 function style_Geo_Penguin_Count_0() {
+    if(firstLoad)
+        return;
     return {
         pane: 'pane_Geo_Penguin_Count',
         opacity: 1,
@@ -173,7 +177,7 @@ map.getPane('pane_Geo_Penguin_Count_Timed').style.zIndex = 459;
 map.getPane('pane_Geo_Penguin_Count_Timed').style['mix-blend-mode'] = 'normal';
 var layer_Geo_Penguin_Count_Timed = L.timeDimension.layer.geoJson(layer_Geo_Penguin_Count, {
     updateTimeDimension: true,
-    duration: 'P1DT',
+    duration: 'P0DT23H',
     updateTimeDimensionMode: 'union'
 });
 bounds_group.addLayer(layer_Geo_Penguin_Count_Timed);
@@ -213,6 +217,8 @@ function pop_Paths_Combined_2(feature, layer) {
 }
 
 function style_Paths_Combined_2_0(feature) {
+    if(firstLoad)
+        return;
     if (isVisible){
         console.log("returning invisible and uninteractive");
         return {
@@ -262,7 +268,7 @@ map.getPane('pane_Paths_Combined_2_Timed').style.zIndex = 459;
 map.getPane('pane_Paths_Combined_2_Timed').style['mix-blend-mode'] = 'normal';
 var layer_Paths_Combined_2_Timed = L.timeDimension.layer.geoJson(layer_Paths_Combined_2, {
     updateTimeDimension: true,
-    duration: 'P1DT',
+    duration: 'P0DT23H',
     updateTimeDimensionMode: 'union',
 });
 
@@ -344,8 +350,10 @@ map.addLayer(layer_Phillip_Island_Whole_3);
 
 map.timeDimension.on('timeload', function(data){
     map.addLayer(layer_Paths_Combined_2_Timed);
-    document.getElementById("headerPenguinCount").innerHTML = "penguin Count: " + penguinCountToday  + "| Av. Wind Speed: " + Math.round((avgWindSpeed / 25) * 100) / 100;
-    avgWindSpeed = 0;
+    document.getElementById("headerPenguinCount").innerHTML = "Penguin Count: " + penguinCountToday;
+    averages = [0, 0, 0, 0, 0];
+    counters = [0, 0, 0, 0, 0];
+    console.log("timeload running " + new Date(map.timeDimension.getCurrentTime()).toISOString().split('T')[0]);
 });
 
 function pop_Geo_WEEKLY_SSTweekly_sstcopy_4(feature, layer) {
@@ -384,6 +392,13 @@ function pop_Geo_WEEKLY_SSTweekly_sstcopy_4(feature, layer) {
 }
 
 function style_Geo_WEEKLY_SSTweekly_sstcopy_4_0(feature) {
+    if(firstLoad)
+        return;
+    averages[0] += feature.properties['SST'];
+    counters[0]++;
+    if(counters[0] == 66){
+        document.getElementById("headerPenguinCount").innerHTML += " | Av. Sea Surface Temperature: " + Math.round((averages[0] / 66) * 100) / 100;
+    }
     return {
         pane: 'pane_Geo_WEEKLY_SSTweekly_sstcopy_4',
         opacity: 0.25,
@@ -425,7 +440,7 @@ map.getPane('pane_Geo_WEEKLY_SSTweekly_sstcopy_4_Timed').style.zIndex = 459;
 map.getPane('pane_Geo_WEEKLY_SSTweekly_sstcopy_4_Timed').style['mix-blend-mode'] = 'normal';
 var layer_Geo_WEEKLY_SSTweekly_sstcopy_4_Timed = L.timeDimension.layer.geoJson(layer_Geo_WEEKLY_SSTweekly_sstcopy_4, {
     updateTimeDimension: true,
-    duration: 'P1WT',
+    duration: 'P6DT23H',
     updateTimeDimensionMode: 'union'
 });
 bounds_group.addLayer(layer_Geo_WEEKLY_SSTweekly_sstcopy_4_Timed);
@@ -466,8 +481,14 @@ function pop_Geo_WS2Mws2mcopy_5(feature, layer) {
 }
 
 function style_Geo_WS2Mws2mcopy_5_0(feature) {
-    avgWindSpeed = avgWindSpeed + feature.properties['WS2M'];
-    document.getElementById("headerPenguinCount").innerHTML = "penguin Count: " + penguinCountToday  + "| Av. Wind Speed: " + (Math.round((avgWindSpeed / 25) * 100) / 100) / 2;
+    if(firstLoad)
+        return;
+    averages[1] += feature.properties['WS2M'];
+    counters[1]++;
+    if(counters[1] == 25){
+        document.getElementById("headerPenguinCount").innerHTML += " | Av. Wind Speed: " + Math.round((averages[1] / 25) * 100) / 100;
+    }
+    console.log("Style Running " + new Date(map.timeDimension.getCurrentTime()).toISOString().split('T')[0]);
     return {
         pane: 'pane_Geo_WS2Mws2mcopy_5',
         opacity: 0.25,
@@ -509,8 +530,12 @@ map.getPane('pane_Geo_WS2Mws2mcopy_5_Timed').style.zIndex = 459;
 map.getPane('pane_Geo_WS2Mws2mcopy_5_Timed').style['mix-blend-mode'] = 'normal';
 var layer_Geo_WS2Mws2mcopy_5_Timed = L.timeDimension.layer.geoJson(layer_Geo_WS2Mws2mcopy_5, {
     updateTimeDimension: true,
-    duration: 'P1DT',
+    duration: 'P0DT23H',
     updateTimeDimensionMode: 'union'
+});
+map.timeDimension.registerSyncedLayer(layer_Geo_WS2Mws2mcopy_5_Timed);
+layer_Geo_WS2Mws2mcopy_5_Timed.on("timeload", function(data){
+    console.log("Layer Timeload Running " + new Date(map.timeDimension.getCurrentTime()).toISOString().split('T')[0]);
 });
 bounds_group.addLayer(layer_Geo_WS2Mws2mcopy_5_Timed);
 
@@ -550,6 +575,13 @@ function pop_Geo_RH2Mrh2mcopy_6(feature, layer) {
 }
 
 function style_Geo_RH2Mrh2mcopy_6_0(feature) {
+    if(firstLoad)
+        return;
+    averages[2] += feature.properties['RH2M'];
+    counters[2]++;
+    if(counters[2] == 25){
+        document.getElementById("headerPenguinCount").innerHTML += " | Av. Humidity: " + Math.round((averages[2] / 25) * 100) / 100;
+    }
     return {
         pane: 'pane_Geo_RH2Mrh2mcopy_6',
         opacity: 0.25,
@@ -592,7 +624,7 @@ map.getPane('pane_Geo_RH2Mrh2mcopy_6_Timed').style.zIndex = 459;
 map.getPane('pane_Geo_RH2Mrh2mcopy_6_Timed').style['mix-blend-mode'] = 'normal';
 var layer_Geo_RH2Mrh2mcopy_6_Timed = L.timeDimension.layer.geoJson(layer_Geo_RH2Mrh2mcopy_6, {
     updateTimeDimension: true,
-    duration: 'P1DT',
+    duration: 'P0DT23H',
     updateTimeDimensionMode: 'union'
 });
 bounds_group.addLayer(layer_Geo_RH2Mrh2mcopy_6_Timed);
@@ -633,6 +665,13 @@ function pop_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7(feature, layer) {
 }
 
 function style_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7_0(feature) {
+    if(firstLoad)
+        return;
+    averages[3] += feature.properties['PRECTOTCORR'];
+    counters[3]++;
+    if(counters[3] == 25){
+        document.getElementById("headerPenguinCount").innerHTML += " | Av. Precipitation: " + Math.round((averages[3] / 25) * 100) / 100;
+    }
     return {
         pane: 'pane_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7',
         opacity: 0.25,
@@ -674,7 +713,7 @@ map.getPane('pane_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7_Timed').style
 map.getPane('pane_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7_Timed').style['mix-blend-mode'] = 'normal';
 var layer_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7_Timed = L.timeDimension.layer.geoJson(layer_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7, {
     updateTimeDimension: true,
-    duration: 'P1DT',
+    duration: 'P0DT23H',
     updateTimeDimensionMode: 'union'
 });
 bounds_group.addLayer(layer_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7_Timed);
@@ -715,6 +754,8 @@ function pop_Geo_T2M_MINt2m_mincopy_8(feature, layer) {
 }
 
 function style_Geo_T2M_MINt2m_mincopy_8_0(feature) {
+    if(firstLoad)
+        return;
     return {
         pane: 'pane_Geo_T2M_MINt2m_mincopy_8',
         opacity: 0.25,
@@ -777,7 +818,7 @@ map.getPane('pane_Geo_T2M_MINt2m_mincopy_8_Timed').style.zIndex = 459;
 map.getPane('pane_Geo_T2M_MINt2m_mincopy_8_Timed').style['mix-blend-mode'] = 'normal';
 var layer_Geo_T2M_MINt2m_mincopy_8_Timed = L.timeDimension.layer.geoJson(layer_Geo_T2M_MINt2m_mincopy_8, {
     updateTimeDimension: true,
-    duration: 'P1DT',
+    duration: 'P0DT23H',
     updateTimeDimensionMode: 'union'
 });
 bounds_group.addLayer(layer_Geo_T2M_MINt2m_mincopy_8_Timed);
@@ -818,6 +859,13 @@ function pop_Geo_T2Mt2mcopy_9(feature, layer) {
 }
 
 function style_Geo_T2Mt2mcopy_9_0(feature) {
+    if(firstLoad)
+        return;
+    averages[4] += feature.properties['T2M'];
+    counters[4]++;
+    if(counters[4] == 25){
+        document.getElementById("headerPenguinCount").innerHTML += " | Average Temperature: " + Math.round((averages[4] / 25) * 100) / 100;
+    }
     return {
         pane: 'pane_Geo_T2Mt2mcopy_9',
         opacity: 0.25,
@@ -857,7 +905,7 @@ map.getPane('pane_Geo_T2Mt2mcopy_9_Timed').style.zIndex = 459;
 map.getPane('pane_Geo_T2Mt2mcopy_9_Timed').style['mix-blend-mode'] = 'normal';
 var layer_Geo_T2Mt2mcopy_9_Timed = L.timeDimension.layer.geoJson(layer_Geo_T2Mt2mcopy_9, {
     updateTimeDimension: true,
-    duration: 'P1DT',
+    duration: 'P0DT23H',
     updateTimeDimensionMode: 'union'
 });
 bounds_group.addLayer(layer_Geo_T2Mt2mcopy_9_Timed);
@@ -898,6 +946,8 @@ function pop_Geo_T2M_MAXt2m_maxcopy_10(feature, layer) {
 }
 
 function style_Geo_T2M_MAXt2m_maxcopy_10_0(feature) {
+    if(firstLoad)
+        return;
     return {
         pane: 'pane_Geo_T2M_MAXt2m_maxcopy_10',
         opacity: 0.25,
@@ -937,7 +987,7 @@ map.getPane('pane_Geo_T2M_MAXt2m_maxcopy_10_Timed').style.zIndex = 459;
 map.getPane('pane_Geo_T2M_MAXt2m_maxcopy_10_Timed').style['mix-blend-mode'] = 'normal';
 var layer_Geo_T2M_MAXt2m_maxcopy_10_Timed = L.timeDimension.layer.geoJson(layer_Geo_T2M_MAXt2m_maxcopy_10, {
     updateTimeDimension: true,
-    duration: 'P1DT',
+    duration: 'P0DT23H',
     updateTimeDimensionMode: 'union'
 });
 bounds_group.addLayer(layer_Geo_T2M_MAXt2m_maxcopy_10_Timed);
@@ -972,6 +1022,7 @@ addToRemoveList("Wind Speed");
 addToRemoveList("Sea Surface Temperature");
 pathLayers = [layer_Geo_Penguin_Count_Timed];
 totalLayers.push(layer_Paths_Combined_2_Timed);
+firstLoad = false;
 map.on("zoomend", function(e) {
     if (map.getZoom() > 18 || map.getZoom() < 14)
         isVisible = true;
@@ -1051,7 +1102,6 @@ map.on("layerremove", function(){
 
 
 async function uploadFile(){
-    firstLoad = false;
     const radioButtons = document.querySelectorAll('input[name="File_Type"]');
     for (const radioButton of radioButtons) {
         if (radioButton.checked) {
@@ -1082,7 +1132,7 @@ async function uploadFile(){
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Paths_Combined_2.options), {
                     updateTimeDimension: true,
-                    duration: 'P1DT',
+                    duration: 'P0DT23H',
                     updateTimeDimensionMode: 'union'
                 });
                 break;
@@ -1117,7 +1167,7 @@ async function uploadFile(){
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_Penguin_Count.options), {
                     updateTimeDimension: true,
-                    duration: 'P1DT',
+                    duration: 'P0DT23H',
                     updateTimeDimensionMode: 'union'
                 });
                 break;
@@ -1135,7 +1185,7 @@ async function uploadFile(){
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_T2Mt2mcopy_9.options), {
                     updateTimeDimension: true,
-                    duration: 'P1DT',
+                    duration: 'P0DT23H',
                     updateTimeDimensionMode: 'union'
                 });
                 break;
@@ -1153,7 +1203,7 @@ async function uploadFile(){
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_T2M_MAXt2m_maxcopy_10.options), {
                     updateTimeDimension: true,
-                    duration: 'P1DT',
+                    duration: 'P0DT23H',
                     updateTimeDimensionMode: 'union'
                 });
                 break;
@@ -1171,7 +1221,7 @@ async function uploadFile(){
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_T2M_MINt2m_mincopy_8.options), {
                     updateTimeDimension: true,
-                    duration: 'P1DT',
+                    duration: 'P0DT23H',
                     updateTimeDimensionMode: 'union'
                 });
                 break;
@@ -1189,7 +1239,7 @@ async function uploadFile(){
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7.options), {
                     updateTimeDimension: true,
-                    duration: 'P1DT',
+                    duration: 'P0DT23H',
                     updateTimeDimensionMode: 'union'
                 });
                 break;
@@ -1208,7 +1258,7 @@ async function uploadFile(){
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_RH2Mrh2mcopy_6.options), {
                     updateTimeDimension: true,
-                    duration: 'P1DT',
+                    duration: 'P0DT23H',
                     updateTimeDimensionMode: 'union'
                 });
                 break;
@@ -1226,7 +1276,7 @@ async function uploadFile(){
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_WS2Mws2mcopy_5.options), {
                     updateTimeDimension: true,
-                    duration: 'P1DT',
+                    duration: 'P0DT23H',
                     updateTimeDimensionMode: 'union'
                 });
                 break;
@@ -1244,7 +1294,7 @@ async function uploadFile(){
                 });
                 var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_WEEKLY_SSTweekly_sstcopy_4.options), {
                     updateTimeDimension: true,
-                    duration: 'P1WT',
+                    duration: 'P6DT23H',
                     updateTimeDimensionMode: 'union'
                 });
                 break;
@@ -1355,7 +1405,6 @@ function removeLayer(){
 }
 
 async function createChart(){
-    firstLoad = false;
     const checkboxes = document.querySelectorAll('input[name="Chart_Type"]');
     var dataset = [];
     for (const checkbox of checkboxes) {
