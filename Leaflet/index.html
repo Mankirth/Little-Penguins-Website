@@ -25,124 +25,126 @@
                 <p id="headerPenguinCount" font-size: 24px;>Penguin Count: 880</p>
             </div>
         </div>
+        <br>
+        <div id="adjustments">
+            <br><h2>Adjustments</h2>
+            <h3>Add a Layer</h3>
+            <form id="AddLayerForm"method="post">
+                <label for="data">Type of Data:</label>
+                <input type="radio" id="total" name="File_Type" value="total" required>
+                <label for="total">Total Penguin Count</label>
+                <input type="radio" id="paths" name="File_Type" value="paths" required>
+                <label for="paths">Path Seperated Penguin Count</label>
+                <input type="radio" id="T2M" name="File_Type" value="averageTemp" required>
+                <label for="T2M">Average Temperature</label>
+                <input type="radio" id="T2M_Max" name="File_Type" value="maxTemp" required>
+                <label for="T2M_Max">Maximum Temperature</label>
+                <input type="radio" id="T2M_Min" name="File_Type" value="minTemp" required>
+                <label for="T2M_Min">Minimum Temperature</label>
+                <input type="radio" id="Precipitation" name="File_Type" value="precipitation" required>
+                <label for="Precipitation">Precipitation</label>
+                <input type="radio" id="Humidity" name="File_Type" value="humidity" required>
+                <label for="Humidity">Humidity</label>
+                <input type="radio" id="Wind Speed" name="File_Type" value="windSpeed" required>
+                <label for="Wind Speed">Wind Speed</label>
+                <input type="radio" id="SST" name="File_Type" value="seaSurfaceTemp" required>
+                <label for="SST">Weekly Sea Surface Temperature</label><br>
+                <br>
+                <table>
+                    <tr>
+                        <th class="layerTable">Layer(s)</th>
+                        <th class="layerTable">Required CSV Column Order</th>
+                        <th class="layerTable">Formatting Notes</th>
+                    </tr>
+                    <tr>
+                        <td class="layerTable">Total Penguin Count</td>
+                        <td class="layerTable">Date | Reading</td>
+                        <td class="layerTable"></td>
+                    </tr>
+                    <tr>
+                        <td class="layerTable">Path Seperated Penguin Count</td>
+                        <td class="layerTable">Date | Reading | Pathway</td>
+                        <td class="layerTable">"Center", "West", "Far West", or "East"</td>
+                    </tr>
+                    <tr>
+                        <td class="layerTable">Temperature/Precipitation/Humidity/Wind Speed</td>
+                        <td class="layerTable">Latituide | Longitude | Reading | Date</td>
+                        <td class="layerTable"></td>
+                    </tr>
+                    <tr>
+                        <td class="layerTable">Sea Surface Temperature</td>
+                        <td class="layerTable">Date | Reading | Latitude | Longitude</td>
+                        <td class="layerTable">Must be Weekly Data</td>
+                    </tr>
+                </table>
+                <br>
+                <label for="layerename">Name Your Layer: </label>
+                <input type="text" id="layername" name ="layername" required>
+                <input type="file" id="data" name="data" accept=".csv" required><br><br>
+                <input type="button" value="Upload" onclick="uploadFile()">
+            </form> <br> <br>
 
-        <h2>Adjustments</h2>
-        <h3>Add a Layer</h3>
-        <form id="AddLayerForm"method="post">
-            <label for="data">Type of Data:</label>
-            <input type="radio" id="total" name="File_Type" value="total" required>
-            <label for="total">Total Penguin Count</label>
-            <input type="radio" id="paths" name="File_Type" value="paths" required>
-            <label for="paths">Path Seperated Penguin Count</label>
-            <input type="radio" id="T2M" name="File_Type" value="averageTemp" required>
-            <label for="T2M">Average Temperature</label>
-            <input type="radio" id="T2M_Max" name="File_Type" value="maxTemp" required>
-            <label for="T2M_Max">Maximum Temperature</label>
-            <input type="radio" id="T2M_Min" name="File_Type" value="minTemp" required>
-            <label for="T2M_Min">Minimum Temperature</label>
-            <input type="radio" id="Precipitation" name="File_Type" value="precipitation" required>
-            <label for="Precipitation">Precipitation</label>
-            <input type="radio" id="Humidity" name="File_Type" value="humidity" required>
-            <label for="Humidity">Humidity</label>
-            <input type="radio" id="Wind Speed" name="File_Type" value="windSpeed" required>
-            <label for="Wind Speed">Wind Speed</label>
-            <input type="radio" id="SST" name="File_Type" value="seaSurfaceTemp" required>
-            <label for="SST">Weekly Sea Surface Temperature</label><br>
-            <br>
-            <table>
-                <tr>
-                    <th class="layerTable">Layer(s)</th>
-                    <th class="layerTable">Required CSV Column Order</th>
-                    <th class="layerTable">Formatting Notes</th>
-                </tr>
-                <tr>
-                    <td class="layerTable">Total Penguin Count</td>
-                    <td class="layerTable">Date | Reading</td>
-                    <td class="layerTable"></td>
-                </tr>
-                <tr>
-                    <td class="layerTable">Path Seperated Penguin Count</td>
-                    <td class="layerTable">Date | Reading | Pathway</td>
-                    <td class="layerTable">"Center", "West", "Far West", or "East"</td>
-                </tr>
-                <tr>
-                    <td class="layerTable">Temperature/Precipitation/Humidity/Wind Speed</td>
-                    <td class="layerTable">Latituide | Longitude | Reading | Date</td>
-                    <td class="layerTable"></td>
-                </tr>
-                <tr>
-                    <td class="layerTable">Sea Surface Temperature</td>
-                    <td class="layerTable">Date | Reading | Latitude | Longitude</td>
-                    <td class="layerTable">Must be Weekly Data</td>
-                </tr>
-            </table>
-            <br>
-            <label for="layerename">Name Your Layer: </label>
-            <input type="text" id="layername" name ="layername" required>
-            <input type="file" id="data" name="data" accept=".csv" required><br><br>
-            <input type="button" value="Upload" onclick="uploadFile()">
-        </form> <br> <br>
+            <h3>Remove A Layer</h3>
+            <form id="RemoveLayerForm" method="post">
+                Select Layer: <div id="removeForm"></div>
+                <input type="button" value="Remove" onclick="removeLayer()">
+            </form> <br> <br>
 
-        <h3>Remove A Layer</h3>
-        <form id="RemoveLayerForm" method="post">
-            Select Layer: <div id="removeForm"></div>
-            <input type="button" value="Remove" onclick="removeLayer()">
-        </form> <br> <br>
+            <h3>Change Layer Value limits</h3>
+            <form id="ChangeLimitsForm" method="post">
+                <label>Type of Data:</label>
+                <input type="radio" id="T2M_Max limit" name="Limit_Change" value=6 onclick="fillLimits(6)" required>
+                <label for="T2M_Max limit">Maximum Temperature</label>
+                <input type="radio" id="T2M limit" name="Limit_Change" value=5 onclick="fillLimits(5)" required>
+                <label for="T2M limit">Average Temperature</label>
+                <input type="radio" id="T2M_Min limit" name="Limit_Change" value=4 onclick="fillLimits(4)" required>
+                <label for="T2M_Min limit">Minimum Temperature</label>
+                <input type="radio" id="Precipitation limit" name="Limit_Change" value=3 onclick="fillLimits(3)" required>
+                <label for="Precipitation limit">Precipitation</label>
+                <input type="radio" id="Humidity limit" name="Limit_Change" value=2 onclick="fillLimits(2)" required>
+                <label for="Humidity limit">Humidity</label>
+                <input type="radio" id="Wind Speed limit" name="Limit_Change" value=1 onclick="fillLimits(1)" required>
+                <label for="Wind Speed limit">Wind Speed</label>
+                <input type="radio" id="SST limit" name="Limit_Change" value=0 onclick="fillLimits(0)" required>
+                <label for="SST limit">Weekly Sea Surface Temperature</label><br><br>
+                
+                <label for="minIn">-Edit Values-</label><br>
+                Value minimum: <input type="number" id="minIn" name ="minIn" required><br>
+                Value maximum: <input type="number" id="maxIn" name ="maxIn" required><br>
+                # of gradient categories: <input type="number" id="stepsIn" name ="stepsIn" required><br>
+                Gradient minimum: <input type="color" id="minColIn" name ="minColIn" required><br>
+                Gradient maximum: <input type="color" id="maxColIn" name ="maxColIn" required><br>
+                <input type="button" value="Update" onclick="changeLimits()"> <br> <br>
+            </form>
 
-        <h3>Change Layer Value limits</h3>
-        <form id="ChangeLimitsForm" method="post">
-            <label>Type of Data:</label>
-            <input type="radio" id="T2M_Max limit" name="Limit_Change" value=6 onclick="fillLimits(6)" required>
-            <label for="T2M_Max limit">Maximum Temperature</label>
-            <input type="radio" id="T2M limit" name="Limit_Change" value=5 onclick="fillLimits(5)" required>
-            <label for="T2M limit">Average Temperature</label>
-            <input type="radio" id="T2M_Min limit" name="Limit_Change" value=4 onclick="fillLimits(4)" required>
-            <label for="T2M_Min limit">Minimum Temperature</label>
-            <input type="radio" id="Precipitation limit" name="Limit_Change" value=3 onclick="fillLimits(3)" required>
-            <label for="Precipitation limit">Precipitation</label>
-            <input type="radio" id="Humidity limit" name="Limit_Change" value=2 onclick="fillLimits(2)" required>
-            <label for="Humidity limit">Humidity</label>
-            <input type="radio" id="Wind Speed limit" name="Limit_Change" value=1 onclick="fillLimits(1)" required>
-            <label for="Wind Speed limit">Wind Speed</label>
-            <input type="radio" id="SST limit" name="Limit_Change" value=0 onclick="fillLimits(0)" required>
-            <label for="SST limit">Weekly Sea Surface Temperature</label><br><br>
-            
-            <label for="minIn">-Edit Values-</label><br>
-            Value minimum: <input type="number" id="minIn" name ="minIn" required><br>
-            Value maximum: <input type="number" id="maxIn" name ="maxIn" required><br>
-            # of gradient categories: <input type="number" id="stepsIn" name ="stepsIn" required><br>
-            Gradient minimum: <input type="color" id="minColIn" name ="minColIn" required><br>
-            Gradient maximum: <input type="color" id="maxColIn" name ="maxColIn" required><br>
-            <input type="button" value="Update" onclick="changeLimits()"> <br> <br>
-        </form>
+            <h3>Create Graph</h3>
+            <form id="CreateChartForm" method="post">
+                <label for="data">Type of Data:</label>
+                <input type="checkbox" id="total_Chart" name="Chart_Type" value="total" required>
+                <label for="total_Chart">Penguin Count</label>
+                <input type="checkbox" id="T2M_Chart" name="Chart_Type" value="averageTemp" required>
+                <label for="T2M_Chart">Average Temperature</label>
+                <input type="checkbox" id="T2M_Max_Chart" name="Chart_Type" value="maxTemp" required>
+                <label for="T2M_Max_Chart">Maximum Temperature</label>
+                <input type="checkbox" id="T2M_Min_Chart" name="Chart_Type" value="minTemp" required>
+                <label for="T2M_Min_Chart">Minimum Temperature</label>
+                <input type="checkbox" id="Precipitation_Chart" name="Chart_Type" value="precipitation" required>
+                <label for="Precipitation_Chart">Precipitation</label>
+                <input type="checkbox" id="Humidity_Chart" name="Chart_Type" value="humidity" required>
+                <label for="Humidity_Chart">Humidity</label>
+                <input type="checkbox" id="Wind Speed_Chart" name="Chart_Type" value="windSpeed" required>
+                <label for="Wind Speed_Chart">Wind Speed</label>
+                <input type="checkbox" id="SST_Chart" name="Chart_Type" value="seaSurfaceTemp" required>
+                <label for="SST_Chart">Sea Surface Temperature</label><br>
+                <input type="button" value="Create" onclick="createChart()">
+            </form> <br> <br>
 
-        <h3>Create Graph</h3>
-        <form id="CreateChartForm" method="post">
-            <label for="data">Type of Data:</label>
-            <input type="checkbox" id="total_Chart" name="Chart_Type" value="total" required>
-            <label for="total_Chart">Penguin Count</label>
-            <input type="checkbox" id="T2M_Chart" name="Chart_Type" value="averageTemp" required>
-            <label for="T2M_Chart">Average Temperature</label>
-            <input type="checkbox" id="T2M_Max_Chart" name="Chart_Type" value="maxTemp" required>
-            <label for="T2M_Max_Chart">Maximum Temperature</label>
-            <input type="checkbox" id="T2M_Min_Chart" name="Chart_Type" value="minTemp" required>
-            <label for="T2M_Min_Chart">Minimum Temperature</label>
-            <input type="checkbox" id="Precipitation_Chart" name="Chart_Type" value="precipitation" required>
-            <label for="Precipitation_Chart">Precipitation</label>
-            <input type="checkbox" id="Humidity_Chart" name="Chart_Type" value="humidity" required>
-            <label for="Humidity_Chart">Humidity</label>
-            <input type="checkbox" id="Wind Speed_Chart" name="Chart_Type" value="windSpeed" required>
-            <label for="Wind Speed_Chart">Wind Speed</label>
-            <input type="checkbox" id="SST_Chart" name="Chart_Type" value="seaSurfaceTemp" required>
-            <label for="SST_Chart">Sea Surface Temperature</label><br>
-            <input type="button" value="Create" onclick="createChart()">
-        </form> <br> <br>
-
-        <div id="chartContainer">
-            <canvas id="myChart"></canvas>
+            <div id="chartContainer">
+                <canvas id="myChart"></canvas>
+            </div>
+            <br><br>
+            <div>&nbsp</div>
         </div>
-        <br><br>
-        <div>&nbsp</div>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0"></script>
