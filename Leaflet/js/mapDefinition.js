@@ -149,7 +149,7 @@ function style_Geo_Penguin_Count_0() {
     return {
         pane: 'pane_Geo_Penguin_Count',
         opacity: 1,
-        color: 'rgba(225,255,74,1.0)',
+        color: 'rgba(141,90,153,1.0)',
         dashArray: '',
         lineCap: 'round',
         lineJoin: 'round',
@@ -1037,9 +1037,9 @@ map.on("zoomend", function(e) {
         }
     });
     totalLayers.forEach(path =>{
-        if (map.getZoom() <= 18 && map.getZoom() >= 14) {
+        if (map.getZoom() <= 17 && map.getZoom() >= 14) {
             map.addLayer(path);
-        } else if (map.getZoom() > 18 || map.getZoom() < 14) {
+        } else if (map.getZoom() > 17 || map.getZoom() < 14) {
             map.removeLayer(path);
         }
     });
@@ -1113,6 +1113,8 @@ async function uploadFile(){
     try {
         file = document.getElementById('data').files[0];
         var name = document.getElementById('layername').value;
+        var latSize = document.getElementById('latInput').value / 100;
+        var lonSize = document.getElementById('lonInput').value / 100;
         const content = await file.text();
         const lines = content.split('\n');
         var out;
@@ -1183,7 +1185,23 @@ async function uploadFile(){
                     Object.defineProperty(graphData, line.split(',')[3].trim(), {value: line.split(',')[2], configurable: true, enumerable: true});
                     out.features.push({"type":"Feature","properties":{"fid":"173476","LAT":parseFloat(line.split(',')[0]),"LON":parseFloat(line.split(',')[1]),"T2M":parseFloat(line.split(',')[2]),"time":line.split(',')[3]},"geometry":{"type":"Point","coordinates":[parseFloat(line.split(',')[1]),parseFloat(line.split(',')[0])]}});
                 });
-                var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_T2Mt2mcopy_9.options), {
+                var avOptions = {
+                    attribution: '',
+                    interactive: true,
+                    dataVar: 'json_Geo_T2Mt2mcopy_9',
+                    layerName: 'layer_Geo_T2Mt2mcopy_9',
+                    pane: 'pane_Geo_T2Mt2mcopy_9',
+                    onEachFeature: pop_Geo_T2Mt2mcopy_9,
+                    pointToLayer: function (feature, latlng) {
+                        var context = {
+                            feature: feature,
+                            variables: {}
+                        };
+                        var bounds = L.latLngBounds([latlng.lat - latSize, latlng.lng - longSize], [latlng.lat + latSize, latlng.lng + longSize]);
+                        return L.rectangle(bounds, style_Geo_T2Mt2mcopy_9_0(feature));
+                    },
+                }
+                var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, avOptions), {
                     updateTimeDimension: true,
                     duration: 'P0DT23H',
                     updateTimeDimensionMode: 'union'
@@ -1201,7 +1219,23 @@ async function uploadFile(){
                     Object.defineProperty(graphData, line.split(',')[3].trim(), {value: line.split(',')[2], configurable: true, enumerable: true});
                     out.features.push({"type":"Feature","properties":{"fid":"173478","LAT":parseFloat(line.split(',')[0]),"LON":parseFloat(line.split(',')[1]),"T2M_MAX":parseFloat(line.split(',')[2]),"time":line.split(',')[3]},"geometry":{"type":"Point","coordinates":[parseFloat(line.split(',')[1]),parseFloat(line.split(',')[0])]}});
                 });
-                var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_T2M_MAXt2m_maxcopy_10.options), {
+                var maxOptions = {
+                    attribution: '',
+                    interactive: true,
+                    dataVar: 'json_Geo_T2M_MAXt2m_maxcopy_10',
+                    layerName: 'layer_Geo_T2M_MAXt2m_maxcopy_10',
+                    pane: 'pane_Geo_T2M_MAXt2m_maxcopy_10',
+                    onEachFeature: pop_Geo_T2M_MAXt2m_maxcopy_10,
+                    pointToLayer: function (feature, latlng) {
+                        var context = {
+                            feature: feature,
+                            variables: {}
+                        };
+                        var bounds = L.latLngBounds([latlng.lat - latSize, latlng.lng - lonSize], [latlng.lat + latSize, latlng.lng + lonSize]);
+                        return L.rectangle(bounds, style_Geo_T2M_MAXt2m_maxcopy_10_0(feature));
+                    },
+                }
+                var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, maxOptions), {
                     updateTimeDimension: true,
                     duration: 'P0DT23H',
                     updateTimeDimensionMode: 'union'
@@ -1219,7 +1253,23 @@ async function uploadFile(){
                     Object.defineProperty(graphData, line.split(',')[3].trim(), {value: line.split(',')[2], configurable: true, enumerable: true});
                     out.features.push({"type":"Feature","properties":{"fid":"173478","LAT":parseFloat(line.split(',')[0]),"LON":parseFloat(line.split(',')[1]),"T2M_MIN":parseFloat(line.split(',')[2]),"time":line.split(',')[3]},"geometry":{"type":"Point","coordinates":[parseFloat(line.split(',')[1]),parseFloat(line.split(',')[0])]}});
                 });
-                var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_T2M_MINt2m_mincopy_8.options), {
+                var minOptions = {
+                    attribution: '',
+                    interactive: true,
+                    dataVar: 'json_Geo_T2M_MINt2m_mincopy_8',
+                    layerName: 'layer_Geo_T2M_MINt2m_mincopy_8',
+                    pane: 'pane_Geo_T2M_MINt2m_mincopy_8',
+                    onEachFeature: pop_Geo_T2M_MINt2m_mincopy_8,
+                    pointToLayer: function (feature, latlng) {
+                        var context = {
+                            feature: feature,
+                            variables: {}
+                        };
+                        var bounds = L.latLngBounds([latlng.lat - latSize, latlng.lng - lonSize], [latlng.lat + latSize, latlng.lng + lonSize]);
+                        return L.rectangle(bounds, style_Geo_T2M_MINt2m_mincopy_8_0(feature));
+                    },
+                }
+                var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, minOptions), {
                     updateTimeDimension: true,
                     duration: 'P0DT23H',
                     updateTimeDimensionMode: 'union'
@@ -1237,7 +1287,23 @@ async function uploadFile(){
                     Object.defineProperty(graphData, line.split(',')[3].trim(), {value: line.split(',')[2], configurable: true, enumerable: true});
                     out.features.push({"type":"Feature","properties":{"fid":"173476","LAT":parseFloat(line.split(',')[0]),"LON":parseFloat(line.split(',')[1]),"PRECTOTCORR":parseFloat(line.split(',')[2]),"time":line.split(',')[3]},"geometry":{"type":"Point","coordinates":[parseFloat(line.split(',')[1]),parseFloat(line.split(',')[0])]}});
                 });
-                var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7.options), {
+                var precOptions = {
+                    attribution: '',
+                    interactive: true,
+                    dataVar: 'json_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7',
+                    layerName: 'layer_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7',
+                    pane: 'pane_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7',
+                    onEachFeature: pop_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7,
+                    pointToLayer: function (feature, latlng) {
+                        var context = {
+                            feature: feature,
+                            variables: {}
+                        };
+                        var bounds = L.latLngBounds([latlng.lat - latSize, latlng.lng - lonSize], [latlng.lat + latSize, latlng.lng + lonSize]);
+                        return L.rectangle(bounds, style_Geo_PRECTOTCORRpenguin_data__prectotcorr_1copy_7_0(feature));
+                    },
+                }
+                var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, precOptions), {
                     updateTimeDimension: true,
                     duration: 'P0DT23H',
                     updateTimeDimensionMode: 'union'
@@ -1256,7 +1322,23 @@ async function uploadFile(){
                     console.log("Line: " + line.split(',')[0]);
                     out.features.push({"type":"Feature","properties":{"fid":"173481","LAT":parseFloat(line.split(',')[0]),"LON":parseFloat(line.split(',')[1]),"RH2M":parseFloat(line.split(',')[2]),"time":line.split(',')[3]},"geometry":{"type":"Point","coordinates":[parseFloat(line.split(',')[1]),parseFloat(line.split(',')[0])]}});
                 });
-                var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_RH2Mrh2mcopy_6.options), {
+                var humidityOptions = {
+                    attribution: '',
+                    interactive: true,
+                    dataVar: 'json_Geo_RH2Mrh2mcopy_6',
+                    layerName: 'layer_Geo_RH2Mrh2mcopy_6',
+                    pane: 'pane_Geo_RH2Mrh2mcopy_6',
+                    onEachFeature: pop_Geo_RH2Mrh2mcopy_6,
+                    pointToLayer: function (feature, latlng) {
+                        var context = {
+                            feature: feature,
+                            variables: {}
+                        };
+                        var bounds = L.latLngBounds([latlng.lat - latSize, latlng.lng - lonSize], [latlng.lat + latSize, latlng.lng + lonSize]);
+                        return L.rectangle(bounds, style_Geo_RH2Mrh2mcopy_6_0(feature));
+                    }
+                }
+                var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, humidityOptions), {
                     updateTimeDimension: true,
                     duration: 'P0DT23H',
                     updateTimeDimensionMode: 'union'
@@ -1274,7 +1356,23 @@ async function uploadFile(){
                     Object.defineProperty(graphData, line.split(',')[3].trim(), {value: line.split(',')[2], configurable: true, enumerable: true});
                     out.features.push({"type":"Feature","properties":{"fid":"173482","field_1":173481.0,"LAT":parseFloat(line.split(',')[0]),"LON":parseFloat(line.split(',')[1]),"WS2M":parseFloat(line.split(',')[2]),"time":line.split(',')[3]},"geometry":{"type":"Point","coordinates":[parseFloat(line.split(',')[1]),parseFloat(line.split(',')[0])]}});
                 });
-                var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_WS2Mws2mcopy_5.options), {
+                var wsOptions = {
+                    attribution: '',
+                    interactive: true,
+                    dataVar: 'json_Geo_WS2Mws2mcopy_5',
+                    layerName: 'layer_Geo_WS2Mws2mcopy_5',
+                    pane: 'pane_Geo_WS2Mws2mcopy_5',
+                    onEachFeature: pop_Geo_WS2Mws2mcopy_5,
+                    pointToLayer: function (feature, latlng) {
+                        var context = {
+                            feature: feature,
+                            variables: {}
+                        };
+                        var bounds = L.latLngBounds([latlng.lat - latSize, latlng.lng - lonSize], [latlng.lat + latSize, latlng.lng + lonSize]);
+                        return L.rectangle(bounds, style_Geo_WS2Mws2mcopy_5_0(feature));
+                    },
+                }
+                var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, wsOptions), {
                     updateTimeDimension: true,
                     duration: 'P0DT23H',
                     updateTimeDimensionMode: 'union'
@@ -1292,7 +1390,23 @@ async function uploadFile(){
                     Object.defineProperty(graphData, line.split(',')[0].trim(), {value: line.split(',')[1], configurable: true, enumerable: true});
                     out.features.push({"type":"Feature","properties":{"fid":"957","field_1":956.0,"time":line.split(',')[0],"SST":parseFloat(line.split(',')[1]),"LON":parseFloat(line.split(',')[2]),"LAT":parseFloat(line.split(',')[3])},"geometry":{"type":"Point","coordinates":[parseFloat(line.split(',')[2]),parseFloat(line.split(',')[3])]}});
                 });
-                var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, layer_Geo_WEEKLY_SSTweekly_sstcopy_4.options), {
+                var sstOptions = {
+                    attribution: '',
+                    interactive: true,
+                    dataVar: 'json_Geo_WEEKLY_SSTweekly_sstcopy_4',
+                    layerName: 'layer_Geo_WEEKLY_SSTweekly_sstcopy_4',
+                    pane: 'pane_Geo_WEEKLY_SSTweekly_sstcopy_4',
+                    onEachFeature: pop_Geo_WEEKLY_SSTweekly_sstcopy_4,
+                    pointToLayer: function (feature, latlng) {
+                        var context = {
+                            feature: feature,
+                            variables: {}
+                        };
+                        var bounds = L.latLngBounds([latlng.lat - latSize, latlng.lng - lonSize], [latlng.lat + latSize, latlng.lng + lonSize]);
+                        return L.rectangle(bounds, style_Geo_WEEKLY_SSTweekly_sstcopy_4_0(feature));
+                    },
+                }
+                var newLayer = L.timeDimension.layer.geoJson(L.geoJson(out, sstOptions), {
                     updateTimeDimension: true,
                     duration: 'P6DT23H',
                     updateTimeDimensionMode: 'union'
@@ -1320,6 +1434,20 @@ function fillLimits(i){
     document.getElementById('stepsIn').value = steps[i];
     document.getElementById('minColIn').value = rgbToHex(minCols[i][0], minCols[i][1], minCols[i][2]);
     document.getElementById('maxColIn').value = rgbToHex(maxCols[i][0], maxCols[i][1], maxCols[i][2]);
+}
+
+function fillSizes(i){
+    var x = 25, y = 31.25
+    if(i == 0){
+        x = 0;
+        y = 0;
+    }
+    else if(i == 1){
+        x = 12.5;
+        y = 12.5;
+    }
+    document.getElementById('latInput').value = x;
+    document.getElementById('lonInput').value = y;
 }
 
 function componentToHex(c) {

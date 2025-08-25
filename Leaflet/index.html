@@ -18,7 +18,17 @@
     </head>
     <body>
         <h1>Phillip Island Map</h1>
-        <p id="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id efficitur ligula. Donec nec est quis lorem vehicula semper eu in magna. Mauris vehicula imperdiet mauris et aliquam. Maecenas tortor orci, tempor eu tortor eget, fermentum tempor libero. Quisque bibendum elementum ipsum vitae tempus. Sed nibh eros, aliquam id laoreet ac, dictum mollis nunc. Aliquam fringilla turpis vitae diam cursus egestas ac nec libero. Proin lobortis lacus lacus, ac consectetur tellus placerat nec. Nunc aliquet et justo sit amet commodo. Aenean in tellus in dui tincidunt condimentum at et turpis.</p>
+        <p id="description">This website is a tool to help the researchers on Phillip Island better display and analyse climate 
+            data in relation to penguin population. In the top right corner of the map you can activate and deactivate layers displaying climate data.
+            Hovering over the island or any of the climate points will display their current value and zooming into the island will show you the count of penguins
+            for each path. In the bottom left corner is the timeline where you can control thhe date you are currently viewing and have the map play through
+            days from 0.1-10 days per second. <br><br>
+
+            Below the map is the adjustments section where you can add, remove, or edit data layers and generate a graph of the data on the map.
+            Time to upload data depends on the amount of data being uploaded and computer performance, expect about 1 second of loading for every 20,000 lines of data. The form will clear once the data is added.
+            Be sure that the column order of the data you upload matches the requirements on the table.
+
+        </p>
         <br>
         <div id="map">
             <div id="mapHeader">
@@ -31,23 +41,23 @@
             <h3>Add a Layer</h3>
             <form id="AddLayerForm"method="post">
                 <label for="data">Type of Data:</label>
-                <input type="radio" id="total" name="File_Type" value="total" required>
+                <input type="radio" id="total" name="File_Type" value="total" onclick="fillSizes(0)" required>
                 <label for="total">Total Penguin Count</label>
-                <input type="radio" id="paths" name="File_Type" value="paths" required>
+                <input type="radio" id="paths" name="File_Type" value="paths" onclick="fillSizes(0)" required>
                 <label for="paths">Path Seperated Penguin Count</label>
-                <input type="radio" id="T2M" name="File_Type" value="averageTemp" required>
+                <input type="radio" id="T2M" name="File_Type" value="averageTemp" onclick="fillSizes(2)" required>
                 <label for="T2M">Average Temperature</label>
-                <input type="radio" id="T2M_Max" name="File_Type" value="maxTemp" required>
+                <input type="radio" id="T2M_Max" name="File_Type" value="maxTemp" onclick="fillSizes(2)" required>
                 <label for="T2M_Max">Maximum Temperature</label>
-                <input type="radio" id="T2M_Min" name="File_Type" value="minTemp" required>
+                <input type="radio" id="T2M_Min" name="File_Type" value="minTemp" onclick="fillSizes(2)" required>
                 <label for="T2M_Min">Minimum Temperature</label>
-                <input type="radio" id="Precipitation" name="File_Type" value="precipitation" required>
+                <input type="radio" id="Precipitation" name="File_Type" value="precipitation" onclick="fillSizes(2)" required>
                 <label for="Precipitation">Precipitation</label>
-                <input type="radio" id="Humidity" name="File_Type" value="humidity" required>
+                <input type="radio" id="Humidity" name="File_Type" value="humidity" onclick="fillSizes(2)" required>
                 <label for="Humidity">Humidity</label>
-                <input type="radio" id="Wind Speed" name="File_Type" value="windSpeed" required>
+                <input type="radio" id="Wind Speed" name="File_Type" value="windSpeed" onclick="fillSizes(2)" required>
                 <label for="Wind Speed">Wind Speed</label>
-                <input type="radio" id="SST" name="File_Type" value="seaSurfaceTemp" required>
+                <input type="radio" id="SST" name="File_Type" value="seaSurfaceTemp" onclick="fillSizes(1)" required>
                 <label for="SST">Weekly Sea Surface Temperature</label><br>
                 <br>
                 <table>
@@ -80,7 +90,11 @@
                 <br>
                 <label for="layerename">Name Your Layer: </label>
                 <input type="text" id="layername" name ="layername" required>
-                <input type="file" id="data" name="data" accept=".csv" required><br><br>
+                <input type="file" id="data" name="data" accept=".csv" required><br>
+                <label for="latInput">Enter Marker Size (Climate Data): </label>
+                <input type="number" id="latInput" name="latInput" required>
+                <input type="number" id="lonInput" name="lonInput" required>
+                <p>Size is measured In degrees * 100 (25 & 31.25 equate to 0.25 & 0.3125 degrees)</p><br>
                 <input type="button" value="Upload" onclick="uploadFile()">
             </form> <br> <br>
 
