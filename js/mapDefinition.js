@@ -1531,8 +1531,9 @@ function removeLayer(){
     layers.delete(layerIn);
     document.getElementById("RemoveLayerForm").reset(); 
 }
-
+var generatedChart = null;
 async function createChart(){
+    generatedChart = null;
     const checkboxes = document.querySelectorAll('input[name="Chart_Type"]');
     var dataset = [];
     for (const checkbox of checkboxes) {
@@ -1585,7 +1586,7 @@ async function createChart(){
     if(oldChart != null)
         oldChart.destroy();
     console.log("Chart: " + ctx);
-    new Chart(ctx, {
+    var myChart = new Chart(ctx, {
         type: 'scatter',
         data: {
         datasets: dataset
@@ -1602,9 +1603,24 @@ async function createChart(){
                     normalized: true,
                     beginAtZero: true
                 }
-            }
+            },
+            animation: {
+                onComplete: function () {
+                    generatedChart = myChart.toBase64Image();
+                },
+            },
         }
     });
+}
+
+function download() {
+    if(generatedChart == null) return;
+    const a = document.createElement('a');
+    a.href = generatedChart;
+    a.download = "PhillipIslandChart.png";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
 function merge_options(obj1,obj2){
